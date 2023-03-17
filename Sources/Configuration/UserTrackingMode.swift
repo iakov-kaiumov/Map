@@ -31,6 +31,7 @@ public enum UserTrackingMode {
         case .followWithHeading:
             return .followWithHeading
         #endif
+            
         }
     }
 

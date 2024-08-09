@@ -42,6 +42,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
+    let zPriority: MKAnnotationViewZPriority
     let anchorPoint: CGPoint?
     let content: Content
 
@@ -50,6 +51,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     public init(
         coordinate: CLLocationCoordinate2D,
         anchorPoint: CGPoint = .init(x: 0.5, y: 0.5),
+        zPriority: MKAnnotationViewZPriority = .defaultUnselected,
         title: String? = nil,
         subtitle: String? = nil,
         clusteringIdentifier: String? = nil,
@@ -58,18 +60,21 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
         self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
+        self.zPriority = zPriority
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
         anchorPoint: CGPoint = .init(x: 0.5, y: 0.5),
+        zPriority: MKAnnotationViewZPriority = .defaultUnselected,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
         self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
+        self.zPriority = zPriority
         self.content = content()
     }
 
@@ -80,7 +85,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
             withIdentifier: Self.reuseIdentifier,
             for: annotation
         ) as? MKMapAnnotationView<Content>
-
+        view?.zPriority = zPriority
         view?.setup(for: self)
         return view
     }
